@@ -9,14 +9,14 @@ nginx:
     - wordpress
   volumes:
     - ./wp:/var/www/html:ro
-    - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - /var/log/nginx:/var/log/nginx
+    - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./var/log/nginx:/var/log/nginx
 
 mysql:
    image: mariadb:latest
    restart: always
    volumes:
-    - /var/mysql:/var/lib/mysql
+    - ./var/mysql:/var/lib/mysql
    environment:
     MYSQL_ROOT_PASSWORD: password
 
