@@ -1,32 +1,41 @@
-nginx:
-  image: nginx:latest
-  restart: always
-  ports:
-    - 80:80
-    - 443:443
-  log_driver: syslog
-  links:
-    - wordpress
-  volumes:
-    - ./wp:/var/www/html:ro
-    - ./etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-    - ./var/log/nginx:/var/log/nginx
-
-mysql:
-   image: mariadb:latest
-   restart: always
-   volumes:
-    - ./var/mysql:/var/lib/mysql
-   environment:
-    MYSQL_ROOT_PASSWORD: password
-
-wordpress:
-  image: evild/docker-wordpress-fpm:latest
-  restart: always
-  links:
-    - mysql
-  volumes:
-    - ./wp:/var/www/html
-  environment:
-    WORDPRESS_DB_NAME: wpdb
-    WORDPRESS_TABLE_PREFIX: wp_
+version: '2'
+services:
+  nginx:
+    image: evild/alpine-nginx:latest
+    restart: always
+    links:
+      - php
+    volumes:
+      - wordpress-data:/var/www/html/:ro
+      - ./nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    ports:
+      - 80:80
+      - 443:443
+  php:
+    image: evild/alpine-wordpress:latest
+    restart: always
+    volumes:
+      - wordpress-data:/var/www/html
+      - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - WORDPRESS_DB_NAME=wpdb
+      - WORDPRESS_TABLE_PREFIX=wp_
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_PASSWORD=password
+  db:
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - wordpress-db-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+volumes:
+  wordpress-data:
+    driver: local
+  wordpress-db-data:
+    driver: local
