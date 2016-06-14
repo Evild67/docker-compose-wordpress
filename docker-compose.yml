@@ -1,10 +1,8 @@
 version: '2'
 services:
   nginx:
-    image: evild/alpine-nginx:latest
+    image: evild/alpine-nginx:1.11.1-libressl
     restart: always
-    links:
-      - php
     volumes:
       - wordpress-data:/var/www/html/:ro
       - ./nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro
@@ -12,21 +10,22 @@ services:
     ports:
       - 80:80
       - 443:443
+    networks:
+      - front
   php:
     image: evild/alpine-wordpress:latest
     restart: always
     volumes:
       - wordpress-data:/var/www/html
       - ./php/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-    depends_on:
-      - db
-    links:
-      - db
     environment:
       - WORDPRESS_DB_NAME=wpdb
       - WORDPRESS_TABLE_PREFIX=wp_
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_PASSWORD=password
+    networks:
+      - front
+      - back
   db:
     image: mariadb:latest
     restart: always
@@ -34,8 +33,13 @@ services:
       - wordpress-db-data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
+    networks:
+      - back
 volumes:
   wordpress-data:
     driver: local
   wordpress-db-data:
     driver: local
+networks:
+  front:
+  back:
