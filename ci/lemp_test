@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+  docker-compose up -d
+  if docker ps | grep -q wordpress_nginx; then
+        echo Docker nginx found
+    else
+        echo Docker nginx found
+        exit
+  fi
+
+  if docker ps | grep -q wordpress_php; then
+        echo Docker php found
+    else
+        echo Docker php found
+        exit
+  fi
+
+  if docker ps | grep -q wordpress_mariadb; then
+        echo Docker mariadb found
+    else
+        echo Docker mariadb found
+        exit
+  fi
+
+
+  sleep 30
+  curl -I 127.0.0.1
