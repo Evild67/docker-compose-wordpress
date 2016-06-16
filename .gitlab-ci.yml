@@ -1,0 +1,48 @@
+stages:
+  - test
+  - cleanup
+  - tweet
+  - deploy
+
+test_job:
+  stage: test
+  script:
+    - ci/wordpress_test
+
+cleanup:
+  stage: cleanup
+  script:
+    - ci/wordpress_cleanup
+  when: always
+
+tweet_succeed_job:
+  variables:
+    PASSED: "true"
+  stage: tweet
+  only:
+    - tags
+    - triggers
+    - master
+  script:
+    - ci/wordpress_tweet
+
+tweet_failed_job:
+  variables:
+    PASSED: "false"
+  stage: tweet
+  only:
+    - tags
+    - triggers
+    - master
+  script:
+    - ci/wordpress_tweet
+  when: on_failure
+
+deploy_job:
+  stage: deploy
+  only:
+    - tags
+    - triggers
+    - master
+  script:
+    - ci/wordpress_deploy
