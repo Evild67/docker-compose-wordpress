@@ -2,6 +2,7 @@ version: '2'
 services:
   nginx:
     image: evild/alpine-nginx:1.11.1-libressl
+    container_name: wordpress_nginx
     restart: always
     volumes:
       - wordpress-data:/var/www/html/:ro
@@ -14,6 +15,7 @@ services:
       - front
   php:
     image: evild/alpine-wordpress:latest
+    container_name: wordpress_php
     restart: always
     volumes:
       - wordpress-data:/var/www/html
@@ -28,6 +30,7 @@ services:
       - back
   db:
     image: mariadb:latest
+    container_name: wordpress_mariadb
     restart: always
     volumes:
       - wordpress-db-data:/var/lib/mysql

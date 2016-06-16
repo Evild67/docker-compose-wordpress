@@ -6,21 +6,21 @@ set -e
   if docker ps | grep -q wordpress_nginx; then
         echo Docker nginx found
     else
-        echo Docker nginx found
+        echo Docker nginx not found
         exit
   fi
 
   if docker ps | grep -q wordpress_php; then
         echo Docker php found
     else
-        echo Docker php found
+        echo Docker php not found
         exit
   fi
 
   if docker ps | grep -q wordpress_mariadb; then
         echo Docker mariadb found
     else
-        echo Docker mariadb found
+        echo Docker mariadb not found
         exit
   fi
 
