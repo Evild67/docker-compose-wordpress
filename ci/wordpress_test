@@ -25,5 +25,5 @@ set -e
   fi
 
 
-  sleep 30
+  sleep 60
   curl -I 127.0.0.1
