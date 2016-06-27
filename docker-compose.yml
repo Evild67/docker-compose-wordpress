@@ -29,7 +29,7 @@ services:
       - front
       - back
   db:
-    image: mariadb:latest
+    image: mariadb:10
     container_name: wordpress_mariadb
     restart: always
     volumes:
