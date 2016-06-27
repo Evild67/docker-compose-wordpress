@@ -14,7 +14,7 @@ services:
     networks:
       - front
   php:
-    image: evild/alpine-wordpress:latest
+    image: evild/alpine-wordpress:4.5.3
     container_name: wordpress_php
     restart: always
     volumes:
