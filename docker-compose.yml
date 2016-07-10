@@ -1,7 +1,7 @@
 version: '2'
 services:
   nginx:
-    image: evild/alpine-nginx:1.11.1-libressl
+    image: evild/alpine-nginx:1.11.2-libressl
     container_name: wordpress_nginx
     restart: always
     volumes:
